@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Thu Dec  5 18:58:56 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -130,6 +129,9 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Capture Mode</property>
+                        <attributes>
+                          <attribute name="foreground" value="#ffffffffffff"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -144,6 +146,9 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Snapshot Delay</property>
+                        <attributes>
+                          <attribute name="foreground" value="#ffffffffffff"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -158,6 +163,9 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Snapshot Width</property>
+                        <attributes>
+                          <attribute name="foreground" value="#ffffffffffff"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -173,6 +181,9 @@
                         <property name="halign">start</property>
                         <property name="margin_right">10</property>
                         <property name="label" translatable="yes">Snapshot height</property>
+                        <attributes>
+                          <attribute name="foreground" value="#ffffffffffff"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -283,7 +294,6 @@
                         <property name="receives_default">True</property>
                         <property name="margin_right">54</property>
                         <property name="image">image3</property>
-                        <property name="relief">none</property>
                         <property name="always_show_image">True</property>
                         <signal name="clicked" handler="on_about_clicked" swapped="no"/>
                       </object>
@@ -301,7 +311,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">image5</property>
-                        <property name="relief">none</property>
                         <property name="always_show_image">True</property>
                         <signal name="clicked" handler="on_send_to_gimp_clicked" swapped="no"/>
                       </object>

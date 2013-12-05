@@ -1,6 +1,7 @@
 #/usr/bin/python2
 import os
 import time
+import cairo
 import thread
 from gi.repository import Gtk, GdkPixbuf
 
@@ -14,6 +15,12 @@ take_screenshot_at_launch()
 
 
 class sceenshot_gui:
+
+    def draw_transparency(self, widget, cr):
+        cr.set_source_rgba(.1, .1, .1, 0.6)
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.paint()
+        cr.set_operator(cairo.OPERATOR_OVER)
 
     def on_take_new_snapshot_clicked(self, widget):
         time.sleep(float(self.capture_delay_button.get_text()))
@@ -94,6 +101,12 @@ class sceenshot_gui:
         self.snapshot_width = self.intf.get_object('snapshot_width')
         self.capturemode = self.intf.get_object('capturemodebox')
         self.window = self.intf.get_object("window1")
+        self.window.screen = self.window.get_screen()
+        self.window.visual = self.window.screen.get_rgba_visual()
+        if self.window.visual != None and self.window.screen.is_composited():
+            self.window.set_visual(self.window.visual)
+        self.window.set_app_paintable(True)
+        self.window.connect("draw", self.draw_transparency)
         self.window.connect("delete-event", Gtk.main_quit)
         self.window.show_all()
 
