@@ -17,10 +17,19 @@ class sceenshot_gui:
 
     def on_take_new_snapshot_clicked(self, widget):
         time.sleep(float(self.capture_delay_button.get_text()))
+
         if self.capturemode.get_active_text() == "Custom Width & Height":
-            os.system('imlib2_grab -width {0} -height {1} /tmp/Screenshot1.png'.format(self.snapshot_width.get_text(), self.snapshot_height.get_text()))
-            os.system('imlib2_grab -width 425 -height 240 /tmp/Screenshot2.png')
-            self.PNG.set_from_file('/tmp/Screenshot2.png')
+            try:
+                os.system('imlib2_grab -width {0} -height {1} /tmp/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text())))
+                os.system('imlib2_grab -width 425 -height 240 /tmp/Screenshot2.png')
+                self.PNG.set_from_file('/tmp/Screenshot2.png')
+            except ValueError:
+                dialog_detected_letters = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING,
+                Gtk.ButtonsType.OK, "Type only numbers, please !")
+                dialog_detected_letters.format_secondary_text("")
+                dialog_detected_letters.run()
+                dialog_detected_letters.destroy()
+
         if self.capturemode.get_active_text() == "Full Screen":
             width = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")
             height = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}'")
