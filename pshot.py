@@ -9,7 +9,7 @@ from gi.repository import Gtk, GdkPixbuf
 class take_screenshot_at_launch:
     width = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")
     height = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}'")
-    os.system('imlib2_grab -width 425 -height 240 /tmp/Screenshot2.png')
+    os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
     os.system('imlib2_grab -width "{0}" -height "{1}" /tmp/Screenshot1.png'.format(width, height))
 take_screenshot_at_launch()
 
@@ -32,7 +32,7 @@ class sceenshot_gui:
         if self.capturemode.get_active_text() == "Custom Width & Height":
             try:
                 os.system('imlib2_grab -width {0} -height {1} /tmp/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text())))
-                os.system('imlib2_grab -width 425 -height 240 /tmp/Screenshot2.png')
+                os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
                 self.PNG.set_from_file('/tmp/Screenshot2.png')
             except ValueError:
                 dialog_detected_letters = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING,
@@ -45,7 +45,7 @@ class sceenshot_gui:
             width = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")
             height = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}'")
             os.system('imlib2_grab -width "{0}" -height "{1}" /tmp/Screenshot1.png'.format(width, height))
-            os.system('imlib2_grab -width 425 -height 240 /tmp/Screenshot2.png')
+            os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
             self.PNG.set_from_file('/tmp/Screenshot2.png')
 
     def on_save_as_clicked(self, widget):
