@@ -25,6 +25,10 @@ class sceenshot_gui:
     def on_take_new_snapshot_clicked(self, widget):
         time.sleep(float(self.capture_delay_button.get_text()))
 
+        if self.capturemode.get_active_text() == "Active Window":
+            os.system('sh data_pshot/get_active_window.sh')
+            self.PNG.set_from_file('/tmp/Screenshot2.png')
+
         if self.capturemode.get_active_text() == "Custom Width & Height":
             try:
                 os.system('imlib2_grab -width {0} -height {1} /tmp/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text())))

@@ -198,6 +198,7 @@
                         <property name="can_focus">False</property>
                         <items>
                           <item id="Full Screen" translatable="yes">Full Screen</item>
+                          <item id="Active Window" translatable="yes">Active Window</item>
                           <item id="Custom Width &amp; Height" translatable="yes">Custom Width &amp; Height</item>
                         </items>
                       </object>
