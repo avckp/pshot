@@ -6,12 +6,12 @@ import thread
 import subprocess
 from gi.repository import Gtk, GdkPixbuf
 
-
+cur_dir = os.getcwd()
 class take_screenshot_at_launch:
     width = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")
     height = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}'")
-    os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
-    os.system('imlib2_grab -width "{0}" -height "{1}" /tmp/Screenshot1.png'.format(width, height))
+    os.system('imlib2_grab -width "{0}" -height "{1}" "{2}"/data_pshot/Screenshot1.png'.format(width, height, cur_dir))
+    os.system('convert "{0}"/data_pshot/Screenshot1.png -resize 425x240 "{1}"/data_pshot/Screenshot2.png'.format(cur_dir, cur_dir))
 take_screenshot_at_launch()
 
 
@@ -29,15 +29,15 @@ class sceenshot_gui:
         if self.capturemode.get_active_text() == "Active Window":
             # active window idea taken from https://wiki.archlinux.org/index.php/Taking_a_Screenshot#Screenshot_of_the_active.2Ffocused_window
             get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
-            os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
-            os.system("convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png")
-            self.PNG.set_from_file('/tmp/Screenshot2.png')
+            os.system("import -window '{0}' '{1}'/data_pshot/Screenshot1.png".format(get_active_window[40:-1], cur_dir))
+            os.system("convert '{0}'/data_pshot/Screenshot1.png -resize 425x240 '{1}'/data_pshot/Screenshot2.png".format(cur_dir, cur_dir))
+            self.PNG.set_from_file(cur_dir + '/data_pshot/Screenshot2.png')
 
         if self.capturemode.get_active_text() == "Custom Width & Height":
             try:
-                os.system('imlib2_grab -width {0} -height {1} /tmp/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text())))
-                os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
-                self.PNG.set_from_file('/tmp/Screenshot2.png')
+                os.system('imlib2_grab -width {0} -height {1} "{2}"/data_pshot/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text(), cur_dir)))
+                os.system('convert "{0}"/data_pshot/Screenshot1.png -resize 425x240 "{1}"/data_pshot/Screenshot2.png'.format(cur_dir, cur_dir))
+                self.PNG.set_from_file(cur_dir + '/data_pshot/Screenshot2.png')
             except ValueError:
                 dialog_detected_letters = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING,
                 Gtk.ButtonsType.OK, "Type only numbers, please !")
@@ -48,9 +48,9 @@ class sceenshot_gui:
         if self.capturemode.get_active_text() == "Full Screen":
             width = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}'")
             height = os.system("xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}'")
-            os.system('imlib2_grab -width "{0}" -height "{1}" /tmp/Screenshot1.png'.format(width, height))
-            os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
-            self.PNG.set_from_file('/tmp/Screenshot2.png')
+            os.system('imlib2_grab -width "{0}" -height "{1}" "{2}"/data_pshot/Screenshot1.png'.format(width, height, cur_dir))
+            os.system('convert "{0}"/data_pshot/Screenshot1.png -resize 425x240 "{1}"/data_pshot/Screenshot2.png'.format(cur_dir, cur_dir))
+            self.PNG.set_from_file('"{0}"/data_pshot/Screenshot2.png'.format(cur_dir))
 
     def on_save_as_clicked(self, widget):
         chooser_dialog = Gtk.FileChooserDialog(title="Save To..."
@@ -61,19 +61,19 @@ class sceenshot_gui:
 
         if response == Gtk.ResponseType.ACCEPT:
             if filename.endswith(".jpeg"):
-                os.system("convert /tmp/Screenshot1.png '{0}'".format(filename))
+                os.system("convert '{0}'/data_pshot/Screenshot1.png '{1}'".format(cur_dir, filename))
             elif filename.endswith(".png"):
-                os.system("cp /tmp/Screenshot1.png " + filename)
+                os.system("cp '{0}'/data_pshot/Screenshot1.png ".format(cur_dir) + filename)
             elif filename.endswith(".jpg"):
-                os.system("convert /tmp/Screenshot1.png '{0}'".format(filename))
+                os.system("convert '{0}'/data_pshot/Screenshot1.png '{1}'".format(cur_dir, filename))
             elif filename.endswith(".bmp"):
-                os.system("convert /tmp/Screenshot1.png '{0}'".format(filename))
+                os.system("convert '{0}'/data_pshot/Screenshot1.png '{1}'".format(cur_dir, filename))
             elif filename.endswith(".tiff"):
-                os.system("convert /tmp/Screenshot1.png '{0}'".format(filename))
+                os.system("convert '{0}'/data_pshot/Screenshot1.png '{1}'".format(cur_dir, filename))
             elif filename.endswith(".tif"):
-                os.system("convert /tmp/Screenshot1.png '{0}'".format(filename))
+                os.system("convert '{0}'/data_pshot/Screenshot1.png '{1}'".format(cur_dir, filename))
             else:
-                os.system("cp /tmp/Screenshot1.png " + filename + ".png")
+                os.system("cp '{0}'/data_pshot/Screenshot1.png ".format(cur_dir) + filename + ".png")
         if response == Gtk.ResponseType.CANCEL:
             pass
         chooser_dialog.destroy()
@@ -91,7 +91,7 @@ class sceenshot_gui:
         aboutdialog.destroy()
 
     def thread_gimp(self, widget):
-        os.system("gimp /tmp/Screenshot1.png")
+        os.system("gimp '{0}'/data_pshot/Screenshot1.png".format(cur_dir))
 
     def on_send_to_gimp_clicked(self, widget):        
         thread.start_new_thread(self.thread_gimp, ("start_gimp_in_new_thread", ))
@@ -103,7 +103,7 @@ class sceenshot_gui:
         self.capturemode = self.intf.get_object('capturemodebox')
         self.capturemode.set_active(0)
         self.PNG = self.intf.get_object("image1")
-        self.PNG.set_from_file('/tmp/Screenshot2.png')
+        self.PNG.set_from_file(cur_dir + '/data_pshot/Screenshot2.png')
         self.capture_delay_button = self.intf.get_object('spinbutton1')
         self.snapshot_height = self.intf.get_object('snapshot_height')
         self.snapshot_width = self.intf.get_object('snapshot_width')
