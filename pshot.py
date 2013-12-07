@@ -37,7 +37,7 @@ class sceenshot_gui:
 
         if self.capturemode.get_active_text() == "Custom Width & Height":
             try:
-                os.system('imlib2_grab -width {0} -height {1} /tmp/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text())))
+                os.system('import -window root -crop {0}x{1}-0+0 -quality 100 /tmp/Screenshot1.png'.format(int(self.snapshot_width.get_text()), int(self.snapshot_height.get_text())))
                 os.system('convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png')
                 self.PNG.set_from_file('/tmp/Screenshot2.png')
             except ValueError:
