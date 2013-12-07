@@ -3,6 +3,7 @@ import os
 import time
 import cairo
 import thread
+import subprocess
 from gi.repository import Gtk, GdkPixbuf
 
 
@@ -26,7 +27,10 @@ class sceenshot_gui:
         time.sleep(float(self.capture_delay_button.get_text()))
 
         if self.capturemode.get_active_text() == "Active Window":
-            os.system('sh data_pshot/get_active_window.sh')
+            # active window idea taken from https://wiki.archlinux.org/index.php/Taking_a_Screenshot#Screenshot_of_the_active.2Ffocused_window
+            get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
+            os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
+            os.system("convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png")
             self.PNG.set_from_file('/tmp/Screenshot2.png')
 
         if self.capturemode.get_active_text() == "Custom Width & Height":
