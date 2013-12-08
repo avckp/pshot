@@ -62,7 +62,7 @@ class sceenshot_gui:
         filename = chooser_dialog.get_filename()
 
         if response == Gtk.ResponseType.ACCEPT:
-            if filename.endswith(".jpeg") or filename.endswith(".tiff") or filename.endswith(".tif") or filename.endswith(".jpg") or filename.endswith(".bmp"):
+            if filename.endswith(".jpeg") or filename.endswith(".tiff") or filename.endswith(".tif") or filename.endswith(".jpg") or filename.endswith(".bmp") or filename.endswith(".gif"):
                 os.system("convert /tmp/Screenshot1.png '{0}'".format(filename))
             elif filename.endswith(".png"):
                 os.system("cp /tmp/Screenshot1.png " + filename)
