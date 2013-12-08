@@ -95,7 +95,7 @@ class sceenshot_gui:
 
     def __init__(self):
         self.intf = Gtk.Builder()
-        self.intf.add_from_file('data_pshot/pshot.glade')
+        self.intf.add_from_file('data_pshot/pshot.ui')
         self.intf.connect_signals(self)
 
         self.capturemode = self.intf.get_object('capturemodebox')
