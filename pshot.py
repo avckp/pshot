@@ -30,10 +30,12 @@ class sceenshot_gui:
 
         if self.capturemode.get_active_text() == "Active Window":
             # active window idea taken from https://wiki.archlinux.org/index.php/Taking_a_Screenshot#Screenshot_of_the_active.2Ffocused_window
-            get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
-            os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
-            os.system("convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png")
+            #get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
+            #os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
+            os.system("xwd -frame -out /tmp/Screenshot1.xwd")
+            os.system("convert /tmp/Screenshot1.xwd -resize 425x240 /tmp/Screenshot2.png")
             self.PNG.set_from_file('/tmp/Screenshot2.png')
+            os.system("convert /tmp/Screenshot1.xwd /tmp/Screenshot1.png")
 
         if self.capturemode.get_active_text() == "Custom Width & Height":
             try:

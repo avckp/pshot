@@ -10,8 +10,11 @@ Archlinux users can install the program directly from AUR, without the need to d
 
 ## Requirements
 
-* python
-* imlib2
-* imagemagick
-* python-gobject (for debian is python-gi)
-* webkitgtk, pywebkitgtk
+
+* imlib2 (for taking screenshot of the entire screen)
+* xorg-xwd (for taking screenshot of the active window)
+* imagemagick (for converting the images and for the custom width and height)
+* python2
+* python2-gobject
+* webkitgtk
+* pywebkitgtk
