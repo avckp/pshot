@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python2
 import os
 import time
 import cairo
@@ -6,7 +6,6 @@ try:
     import thread
 except ImportError:
     import _thread
-import subprocess
 from gi.repository import Gtk, GdkPixbuf
 
 class take_screenshot_at_launch:
@@ -19,6 +18,39 @@ take_screenshot_at_launch()
 
 class sceenshot_gui:
 
+    def on_window_decorations_toggled(self, widget):
+        decorations = open("/tmp/.decorations", "w")
+        if widget.get_active():
+            decorations.write("on")
+            decorations.close()
+        else:
+            decorations.write("off")
+            decorations.close()
+
+    def on_capturemodebox_changed(self, widget):
+        active = self.capturemode.get_active_text()
+
+        if active == "Custom Width & Height":
+            self.window_decorations.set_sensitive(False)
+            self.snapshot_width.set_editable(True)
+            self.snapshot_height.set_editable(True)
+
+        if active == "Full Screen":
+            self.window_decorations.set_sensitive(False)
+            if self.snapshot_width.get_text() is not "" or self.snapshot_height.get_text() is not "":
+                self.snapshot_width.set_text("")
+                self.snapshot_height.set_text("")
+            self.snapshot_width.set_editable(False)
+            self.snapshot_height.set_editable(False)
+
+        if active == "Point Active Window":
+            self.window_decorations.set_sensitive(True)
+            self.snapshot_width.set_text("")
+            self.snapshot_height.set_text("")
+            self.snapshot_width.set_editable(False)
+            self.snapshot_height.set_editable(False)
+
+
     def draw_transparency(self, widget, cr):
         cr.set_source_rgba(.1, .1, .1, 0.6)
         cr.set_operator(cairo.OPERATOR_SOURCE)
@@ -28,11 +60,17 @@ class sceenshot_gui:
     def on_take_new_snapshot_clicked(self, widget):
         time.sleep(float(self.capture_delay_button.get_text()))
 
-        if self.capturemode.get_active_text() == "Active Window":
+        if self.capturemode.get_active_text() == "Point Active Window":
             # active window idea taken from https://wiki.archlinux.org/index.php/Taking_a_Screenshot#Screenshot_of_the_active.2Ffocused_window
             #get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
             #os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
-            os.system("xwd -frame -out /tmp/Screenshot1.xwd")
+            decorations = open("/tmp/.decorations")
+            if "{0}".format(decorations.read()) == "on":
+                os.system("xwd -frame -out /tmp/Screenshot1.xwd")
+            decorations = open("/tmp/.decorations")
+            if "{0}".format(decorations.read()) == "off":
+                os.system("xwd -out /tmp/Screenshot1.xwd")
+            #os.system("xwd -frame -out /tmp/Screenshot1.xwd")
             os.system("convert /tmp/Screenshot1.xwd -resize 425x240 /tmp/Screenshot2.png")
             self.PNG.set_from_file('/tmp/Screenshot2.png')
             os.system("convert /tmp/Screenshot1.xwd /tmp/Screenshot1.png")
@@ -110,12 +148,19 @@ class sceenshot_gui:
         self.snapshot_height = self.intf.get_object('snapshot_height')
         self.snapshot_width = self.intf.get_object('snapshot_width')
         self.capturemode = self.intf.get_object('capturemodebox')
+        self.spinbutton = self.intf.get_object('spinbutton1')
+        self.spinbutton.set_text("2")
+        self.window_decorations = self.intf.get_object('window_decorations')
+
+        decorations = open("/tmp/.decorations", "w")
+        decorations.write("on")
+        decorations.close()
 
         self.window = self.intf.get_object("window1")
 
         self.window.screen = self.window.get_screen()
         self.window.visual = self.window.screen.get_rgba_visual()
-        if self.window.visual != None and self.window.screen.is_composited():
+        if self.window.visual is not None and self.window.screen.is_composited():
             self.window.set_visual(self.window.visual)
         self.window.set_app_paintable(True)
         self.window.connect("draw", self.draw_transparency)

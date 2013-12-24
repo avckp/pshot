@@ -127,7 +127,8 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
+                        <property name="margin_right">10</property>
                         <property name="label" translatable="yes">Capture Mode</property>
                         <attributes>
                           <attribute name="foreground" value="#ffffffffffff"/>
@@ -144,7 +145,8 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
+                        <property name="margin_right">10</property>
                         <property name="label" translatable="yes">Snapshot Delay</property>
                         <attributes>
                           <attribute name="foreground" value="#ffffffffffff"/>
@@ -161,8 +163,9 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Snapshot Width</property>
+                        <property name="halign">end</property>
+                        <property name="margin_right">10</property>
+                        <property name="label" translatable="yes">Custom Width</property>
                         <attributes>
                           <attribute name="foreground" value="#ffffffffffff"/>
                         </attributes>
@@ -178,9 +181,9 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="margin_right">10</property>
-                        <property name="label" translatable="yes">Snapshot height</property>
+                        <property name="label" translatable="yes">Custom height</property>
                         <attributes>
                           <attribute name="foreground" value="#ffffffffffff"/>
                         </attributes>
@@ -198,9 +201,10 @@
                         <property name="can_focus">False</property>
                         <items>
                           <item id="Full Screen" translatable="yes">Full Screen</item>
-                          <item id="Active Window" translatable="yes">Active Window</item>
+                          <item id="Point Active Window" translatable="yes">Point Active Window</item>
                           <item id="Custom Width &amp; Height" translatable="yes">Custom Width &amp; Height</item>
                         </items>
+                        <signal name="changed" handler="on_capturemodebox_changed" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -213,6 +217,7 @@
                       <object class="GtkEntry" id="snapshot_width">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="editable">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -225,6 +230,7 @@
                       <object class="GtkEntry" id="snapshot_height">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="editable">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -237,12 +243,47 @@
                       <object class="GtkSpinButton" id="spinbutton1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">2</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="climb_rate">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Include window decorations</property>
+                        <attributes>
+                          <attribute name="foreground" value="#ffffffffffff"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="window_decorations">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_window_decorations_toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">4</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -311,6 +352,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="margin_right">10</property>
                         <property name="image">image5</property>
                         <property name="always_show_image">True</property>
                         <signal name="clicked" handler="on_send_to_gimp_clicked" swapped="no"/>
