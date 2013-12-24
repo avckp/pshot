@@ -125,14 +125,69 @@ class sceenshot_gui:
         aboutdialog.destroy()
 
     def thread_gimp(self, widget):
-        os.system("gimp /tmp/Screenshot1.png")
+        selected_app = open("/tmp/.app_name")
+        app_name = "{0}".format(selected_app.read())
+        if app_name == "Pinta Image Editor":
+            os.system("pinta /tmp/Screenshot1.png")
+        elif app_name == "GNU Image Manipulation Program":
+            os.system("gimp /tmp/Screenshot1.png")
+        elif app_name == "Gwenview":
+            os.system("gwenview /tmp/Screenshot1.png")
+        elif app_name == "F-Spot Photo Viewer":
+            os.system("f-spot /tmp/Screenshot1.png")
+        elif app_name == "MyPaint":
+            os.system("mypaint /tmp/Screenshot1.png")
+        elif app_name == "Shotwell Photo Viewer":
+            os.system("shotwell /tmp/Screenshot1.png")
+        elif app_name == "Okular":
+            os.system("okular /tmp/Screenshot1.png")
+        elif app_name == "Ristretto Image Viewer":
+            os.system("ristretto /tmp/Screenshot1.png")
+        elif app_name == "gThumb Image Viewer":
+            os.system("gthumb /tmp/Screenshot1.png")
+        elif app_name == "Geeqie":
+            os.system("geeqie /tmp/Screenshot1.png")
+        elif app_name == "feh":
+            os.system("feh /tmp/Screenshot1.png")
+        elif app_name == "gimmage":
+            os.system("gimmage /tmp/Screenshot1.png")
+        elif app_name == "Viewnior":
+            os.system("viewnior /tmp/Screenshot1.png")
+        elif app_name == "Mirage":
+            os.system("mirage /tmp/Screenshot1.png")
+        elif app_name == "Image Viewer":
+            os.system("eog /tmp/Screenshot1.png")
+        elif app_name == "showFoto":
+            os.system("showfoto /tmp/Screenshot1.png")
+        elif app_name == "CinePaint":
+            os.system("cinepaint /tmp/Screenshot1.png")
+        elif app_name == "Krita":
+            os.system("krita /tmp/Screenshot1.png")
+        elif app_name == "Luminance HDR":
+            os.system("luminance-hdr /tmp/Screenshot1.png")
+        elif app_name == "RawTherapee":
+            os.system("rawtherapee /tmp/Screenshot1.png")
+        elif app_name == "KolourPaint":
+            os.system("kolourpaint /tmp/Screenshot1.png")
+        else:
+            os.system("gimp /tmp/Screenshot1.png")
 
     def on_send_to_gimp_clicked(self, widget):
-        try:
-            thread.start_new_thread(self.thread_gimp, ("start_gimp_in_new_thread", ))
-        except NameError:
-            _thread.start_new_thread(self.thread_gimp, ("start_gimp_in_new_thread", ))
-
+        appchooserdialog = Gtk.AppChooserDialog(content_type="image/png")
+        response = appchooserdialog.run()
+        if response == Gtk.ResponseType.OK:
+            app_info = appchooserdialog.get_app_info()
+            display_name = app_info.get_display_name()
+            f = open("/tmp/.app_name", "w")
+            f.write("{0}".format(display_name))
+            f.close()
+            g = open("/tmp/.app_name")
+            print("{0}".format(g.read()))
+            try:
+                thread.start_new_thread(self.thread_gimp, ("start_gimp_in_new_thread", ))
+            except NameError:
+                _thread.start_new_thread(self.thread_gimp, ("start_gimp_in_new_thread", ))
+        appchooserdialog.destroy()
     def __init__(self):
         self.intf = Gtk.Builder()
         self.intf.add_from_file('data_pshot/pshot.ui')
