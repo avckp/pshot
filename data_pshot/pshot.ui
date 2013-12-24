@@ -183,7 +183,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="margin_right">10</property>
-                        <property name="label" translatable="yes">Custom height</property>
+                        <property name="label" translatable="yes">Custom Height</property>
                         <attributes>
                           <attribute name="foreground" value="#ffffffffffff"/>
                         </attributes>
@@ -201,7 +201,7 @@
                         <property name="can_focus">False</property>
                         <items>
                           <item id="Full Screen" translatable="yes">Full Screen</item>
-                          <item id="Point Active Window" translatable="yes">Point Active Window</item>
+                          <item id="Active Window" translatable="yes">Active Window</item>
                           <item id="Custom Width &amp; Height" translatable="yes">Custom Width &amp; Height</item>
                         </items>
                         <signal name="changed" handler="on_capturemodebox_changed" swapped="no"/>

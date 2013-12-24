@@ -2,6 +2,7 @@
 import os
 import time
 import cairo
+import subprocess
 try:
     import thread
 except ImportError:
@@ -43,7 +44,7 @@ class sceenshot_gui:
             self.snapshot_width.set_editable(False)
             self.snapshot_height.set_editable(False)
 
-        if active == "Point Active Window":
+        if active == "Active Window":
             self.window_decorations.set_sensitive(True)
             self.snapshot_width.set_text("")
             self.snapshot_height.set_text("")
@@ -60,20 +61,24 @@ class sceenshot_gui:
     def on_take_new_snapshot_clicked(self, widget):
         time.sleep(float(self.capture_delay_button.get_text()))
 
-        if self.capturemode.get_active_text() == "Point Active Window":
+        if self.capturemode.get_active_text() == "Active Window":
             # active window idea taken from https://wiki.archlinux.org/index.php/Taking_a_Screenshot#Screenshot_of_the_active.2Ffocused_window
             #get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
             #os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
             decorations = open("/tmp/.decorations")
             if "{0}".format(decorations.read()) == "on":
-                os.system("xwd -frame -out /tmp/Screenshot1.xwd")
+                get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
+                os.system("import -frame -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
+                #os.system("xwd -frame -out /tmp/Screenshot1.xwd")
             decorations = open("/tmp/.decorations")
             if "{0}".format(decorations.read()) == "off":
-                os.system("xwd -out /tmp/Screenshot1.xwd")
+                get_active_window = subprocess.check_output("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'", shell=True)
+                os.system("import -window '{0}' /tmp/Screenshot1.png".format(get_active_window[40:-1]))
+                #os.system("xwd -out /tmp/Screenshot1.xwd")
             #os.system("xwd -frame -out /tmp/Screenshot1.xwd")
-            os.system("convert /tmp/Screenshot1.xwd -resize 425x240 /tmp/Screenshot2.png")
+            os.system("convert /tmp/Screenshot1.png -resize 425x240 /tmp/Screenshot2.png")
             self.PNG.set_from_file('/tmp/Screenshot2.png')
-            os.system("convert /tmp/Screenshot1.xwd /tmp/Screenshot1.png")
+            #os.system("convert /tmp/Screenshot1.xwd /tmp/Screenshot1.png")
 
         if self.capturemode.get_active_text() == "Custom Width & Height":
             try:
